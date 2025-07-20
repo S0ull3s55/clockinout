@@ -123,33 +123,8 @@ export default function AdminScreen() {
 
     try {
       setLoading(true);
-      const tempPassword = Math.random().toString(36).slice(-8);
       
-      const { data, error } = await supabase.auth.admin.createUser({
-        email: newUser.email,
-        password: tempPassword,
-        email_confirm: true,
-      });
-
-      if (error) throw error;
-
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: data.user.id,
-        email: newUser.email,
-        role: newUser.role,
-        location_id: newUser.locationId,
-        company_id: company?.id,
-        status: 'pending',
-        first_name: newUser.firstName,
-        last_name: newUser.lastName,
-        phone: newUser.phone,
-      });
-
-      if (profileError) throw profileError;
-
-      const inviteUrl = `${getWebOrigin()}/complete-profile?token=${data.user.id}`;
-
-      const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/send-invitation`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/admin-create-user`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
@@ -157,14 +132,21 @@ export default function AdminScreen() {
         },
         body: JSON.stringify({
           email: newUser.email,
-          tempPassword,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          phone: newUser.phone,
+          role: newUser.role,
+          locationId: newUser.locationId,
+          companyId: company?.id,
           companyName: company?.name,
-          inviteUrl,
+          inviteUrl: `${getWebOrigin()}/complete-profile`,
         }),
       });
 
+      const result = await response.json();
+      
       if (!response.ok) {
-        console.warn('Failed to send invitation email, but user was created');
+        throw new Error(result.error || 'Failed to create user');
       }
 
       Alert.alert('Success', 'User created successfully!');

@@ -113,10 +113,14 @@ export default function SettingsScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await supabase.auth.signOut();
+              setLoading(true);
+              const { error } = await supabase.auth.signOut();
+              if (error) throw error;
               router.replace('/auth/sign-in');
             } catch (error: any) {
               Alert.alert('Error', error.message);
+            } finally {
+              setLoading(false);
             }
           },
         },
