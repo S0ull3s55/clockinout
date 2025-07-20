@@ -160,25 +160,3 @@ export async function checkSupabaseConnection(): Promise<boolean> {
 
 // Connection status getter
 export const getConnectionStatus = () => isConnected;
-supabase.auth.onAuthStateChange((event, session) => {
-  try {
-    if (event === 'SIGNED_OUT') {
-      // Clear any cached data when user signs out
-      AsyncStorage.clear().catch(error => {
-        console.error('Error clearing AsyncStorage:', error);
-      });
-    }
-  } catch (error) {
-    console.error('Auth state change error:', error);
-  }
-});
-
-// Add health check function
-export async function checkSupabaseConnection() {
-  try {
-    const { error } = await supabase.from('profiles').select('count').limit(1);
-    return !error;
-  } catch {
-    return false;
-  }
-}
