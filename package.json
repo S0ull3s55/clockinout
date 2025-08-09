@@ -49,3 +49,6 @@
     "typescript": "^5.3.0"
   }
 }
+"scripts": {
+  "postinstall": "patch-package"
+}
