@@ -1,4 +1,4 @@
-{
+{{
   "name": "bolt-expo-starter",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
@@ -10,7 +10,8 @@
     "web": "npx expo start --web",
     "build:web": "npx expo export --platform web",
     "preview": "npx expo start --web",
-    "clear": "npx expo start --clear"
+    "clear": "npx expo start --clear",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
@@ -48,7 +49,4 @@
     "postinstall-postinstall": "^2.1.0",
     "typescript": "^5.3.0"
   }
-}
-"scripts": {
-  "postinstall": "patch-package"
 }
