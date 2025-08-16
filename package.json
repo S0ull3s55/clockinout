@@ -50,11 +50,3 @@
     "typescript": "^5.3.0"
   }
 }
-node -e '
-const fs=require("fs");
-const p=JSON.parse(fs.readFileSync("package.json","utf8"));
-p.overrides = p.overrides || {};
-p.overrides["tmp"] = "^0.2.4";    // patched tmp
-p.overrides["mime"] = "^2.0.3";   // ensure no vulnerable mime (safe high-level target)
-fs.writeFileSync("package.json", JSON.stringify(p,null,2) + "\n");
-console.log("overrides added to package.json");
