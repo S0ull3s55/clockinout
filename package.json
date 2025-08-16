@@ -27,6 +27,7 @@
     "expo-splash-screen": "~0.29.16",
     "expo-status-bar": "~2.0.0",
     "file-saver": "^2.0.5",
+    "git": "^0.1.5",
     "isomorphic-git": "^1.32.3",
     "lucide-react-native": "^0.359.0",
     "mime-types": "^3.0.1",
