@@ -81,8 +81,8 @@ export default function AdminScreen() {
   }, []);
 
   const getWebOrigin = () => {
-    if (Platform.OS === 'web' && typeof window !== 'undefined') {
-      return window.location.origin;
+    if (Platform.OS === 'web' && typeof typeof window !== "undefined" && window !== 'undefined') {
+      return typeof window !== "undefined" && window.location.origin;
     }
     return process.env.EXPO_PUBLIC_WEB_URL || 'http://localhost:8081';
   };
@@ -186,7 +186,7 @@ export default function AdminScreen() {
   };
 
   const handleExportTimeRecords = async () => {
-    if (Platform.OS !== 'web' || typeof window === 'undefined') {
+    if (Platform.OS !== 'web' || typeof typeof window !== "undefined" && window === 'undefined') {
       Alert.alert('Error', 'Export functionality is only available on web');
       return;
     }
@@ -252,14 +252,14 @@ export default function AdminScreen() {
       ].join('\n');
 
       const blob = new Blob([csvContent], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
+      const url = typeof window !== "undefined" && window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `time_records_${new Date().toISOString().split('T')[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      typeof window !== "undefined" && window.URL.revokeObjectURL(url);
       
       Alert.alert('Success', 'Time records exported!');
     } catch (error: any) {
