@@ -40,6 +40,11 @@ export default function CompleteProfile() {
     try {
       setLoading(true);
 
+      if (!supabase) {
+        Alert.alert('Error', 'Database connection not available');
+        return;
+      }
+
       // Validate form
       if (!form.firstName || !form.lastName) {
         throw new Error('Please fill in all required fields');

@@ -51,6 +51,8 @@ export default function SettingsScreen() {
 
   const loadProfile = async () => {
     try {
+      if (!supabase) return;
+      
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -79,6 +81,11 @@ export default function SettingsScreen() {
   const handleUpdateProfile = async () => {
     try {
       setLoading(true);
+
+      if (!supabase) {
+        Alert.alert('Error', 'Database connection not available');
+        return;
+      }
 
       const { error } = await supabase
         .from('profiles')
@@ -114,6 +121,12 @@ export default function SettingsScreen() {
           onPress: async () => {
             try {
               setLoading(true);
+              
+              if (!supabase) {
+                Alert.alert('Error', 'Authentication not available');
+                return;
+              }
+              
               const { error } = await supabase.auth.signOut();
               if (error) throw error;
               router.replace('/auth/sign-in');

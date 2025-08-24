@@ -49,6 +49,9 @@ export default function HistoryScreen() {
   const loadHistory = async () => {
     try {
       setLoading(true);
+      
+      if (!supabase) return;
+      
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -128,7 +131,7 @@ export default function HistoryScreen() {
   };
 
   const exportData = async () => {
-    if (Platform.OS !== 'web') {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') {
       alert('Export is only available on web');
       return;
     }

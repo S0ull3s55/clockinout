@@ -89,6 +89,8 @@ export default function AdminScreen() {
 
   const fetchUsers = async () => {
     try {
+      if (!supabase) return;
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -124,6 +126,11 @@ export default function AdminScreen() {
     try {
       setLoading(true);
       
+      if (!supabase) {
+        Alert.alert('Error', 'Database connection not available');
+        return;
+      }
+
       const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/admin-create-user`, {
         method: 'POST',
         headers: {
@@ -179,8 +186,13 @@ export default function AdminScreen() {
   };
 
   const handleExportTimeRecords = async () => {
-    if (Platform.OS !== 'web') {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') {
       Alert.alert('Error', 'Export functionality is only available on web');
+      return;
+    }
+
+    if (!supabase) {
+      Alert.alert('Error', 'Database connection not available');
       return;
     }
 

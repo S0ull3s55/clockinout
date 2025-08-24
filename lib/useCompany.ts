@@ -34,6 +34,8 @@ export function useCompany() {
 
   const refreshLocations = async () => {
     try {
+      if (!supabase) return;
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -61,6 +63,12 @@ export function useCompany() {
   useEffect(() => {
     async function loadCompanyData() {
       try {
+        if (!supabase) {
+          setError('Supabase client not available');
+          setLoading(false);
+          return;
+        }
+
         // Set default company data for demo purposes
         const defaultCompany: Company = {
           id: 'demo-company',

@@ -20,6 +20,17 @@ export function useAuth() {
 
     async function initializeAuth() {
       try {
+        if (!supabase) {
+          if (mounted) {
+            setAuthState({
+              session: null,
+              initialized: true,
+              connectionStatus: 'disconnected',
+            });
+          }
+          return;
+        }
+
         const { data: { session } } = await supabase.auth.getSession();
         
         if (mounted) {
@@ -42,25 +53,34 @@ export function useAuth() {
 
     initializeAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (mounted) {
-        setAuthState(prev => ({
-          ...prev,
-          session,
-          initialized: true,
-          connectionStatus: 'connected',
-        }));
-      }
-    });
+    let subscription: any = null;
+    
+    if (supabase) {
+      const { data } = supabase.auth.onAuthStateChange((event, session) => {
+        if (mounted) {
+          setAuthState(prev => ({
+            ...prev,
+            session,
+            initialized: true,
+            connectionStatus: 'connected',
+          }));
+        }
+      });
+      subscription = data;
+    }
 
     return () => {
       mounted = false;
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
   };
 
   return { ...authState, signOut };

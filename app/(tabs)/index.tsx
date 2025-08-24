@@ -48,6 +48,8 @@ export default function HomeScreen() {
 
   const loadDashboardData = async () => {
     try {
+      if (!supabase) return;
+      
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 

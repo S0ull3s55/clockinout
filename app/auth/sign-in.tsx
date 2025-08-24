@@ -46,6 +46,11 @@ export default function SignIn() {
         return;
       }
 
+      if (!supabase) {
+        setError('Authentication service not available');
+        return;
+      }
+
       setLoading(true);
       
       const { error: signInError } = await supabase.auth.signInWithPassword({
