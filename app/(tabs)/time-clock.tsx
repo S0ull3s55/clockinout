@@ -78,7 +78,7 @@ export default function TimeClockScreen() {
     setGettingLocation(true);
     try {
       if (Platform.OS === 'web') {
-        if (typeof navigator === 'undefined' || !navigator.geolocation) {
+        if (typeof window === 'undefined' || !navigator.geolocation) {
           throw new Error('Geolocation not available');
         }
         return new Promise((resolve, reject) => {

@@ -131,7 +131,7 @@ export default function HistoryScreen() {
   };
 
   const exportData = async () => {
-    if (Platform.OS !== 'web' || typeof typeof window !== "undefined" && window === 'undefined') {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') {
       alert('Export is only available on web');
       return;
     }
@@ -158,14 +158,14 @@ export default function HistoryScreen() {
       ].join('\n');
 
       const blob = new Blob([csvContent], { type: 'text/csv' });
-      const url = typeof window !== "undefined" && window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `time_records_${new Date().toISOString().split('T')[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      typeof window !== "undefined" && window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Export error:', error);
     }

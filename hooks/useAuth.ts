@@ -41,6 +41,7 @@ export function useAuth() {
           });
         }
       } catch (error) {
+        console.error('Auth initialization error:', error);
         if (mounted) {
           setAuthState({
             session: null,
