@@ -63,7 +63,10 @@ export function useCompany() {
   useEffect(() => {
     async function loadCompanyData() {
       try {
-        if (!supabase) {
+        const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+        const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+        
+        if (!supabaseUrl || !supabaseAnonKey) {
           setError('Supabase client not available');
           setLoading(false);
           return;

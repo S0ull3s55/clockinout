@@ -20,7 +20,7 @@ export function useAuth() {
 
     async function initializeAuth() {
       try {
-        if (!supabase) {
+        if (!supabaseUrl || !supabaseAnonKey) {
           if (mounted) {
             setAuthState({
               session: null,

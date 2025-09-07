@@ -46,7 +46,8 @@ export default function SignIn() {
         return;
       }
 
-      if (!supabase) {
+      const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+      if (!supabaseUrl) {
         setError('Authentication service not available');
         return;
       }

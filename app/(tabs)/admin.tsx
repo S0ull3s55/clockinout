@@ -89,7 +89,8 @@ export default function AdminScreen() {
 
   const fetchUsers = async () => {
     try {
-      if (!supabase) return;
+      const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+      if (!supabaseUrl) return;
 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;

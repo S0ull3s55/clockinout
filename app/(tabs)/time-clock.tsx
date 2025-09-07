@@ -118,6 +118,9 @@ export default function TimeClockScreen() {
 
   const fetchTodayRecords = async () => {
     try {
+      const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+      if (!supabaseUrl) return;
+      
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
