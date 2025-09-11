@@ -81,10 +81,15 @@ export default function AdminScreen() {
   }, []);
 
   const getWebOrigin = () => {
-    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+    // Safe browser API access with static rendering guard
+    if (Platform.OS === 'web' && typeof window !== 'undefined' && typeof window.location !== 'undefined') {
       return window.location.origin;
     }
-    return process.env.EXPO_PUBLIC_WEB_URL || 'http://localhost:8081';
+    // Safe environment variable access
+    const webUrl = typeof process !== 'undefined' && process.env 
+      ? process.env.EXPO_PUBLIC_WEB_URL 
+      : 'http://localhost:8082';
+    return webUrl || 'http://localhost:8082';
   };
 
   const fetchUsers = async () => {

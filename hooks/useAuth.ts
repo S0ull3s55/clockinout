@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 
+// Safe environment variable access
+const getEnvVar = (key: string, fallback: string = '') => {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key] || fallback;
+  }
+  return fallback;
+};
+
 interface AuthState {
   session: Session | null;
   initialized: boolean;
@@ -20,7 +28,21 @@ export function useAuth() {
 
     async function initializeAuth() {
       try {
+        const supabaseUrl = getEnvVar('EXPO_PUBLIC_SUPABASE_URL');
+        const supabaseAnonKey = getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY');
+        
         if (!supabaseUrl || !supabaseAnonKey) {
+          if (mounted) {
+            setAuthState({
+              session: null,
+              initialized: true,
+              connectionStatus: 'disconnected',
+            });
+          }
+          return;
+        }
+
+        if (!supabase) {
           if (mounted) {
             setAuthState({
               session: null,

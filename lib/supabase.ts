@@ -1,12 +1,20 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+// Safe environment variable access for static rendering
+const getEnvVar = (key: string, fallback: string = '') => {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key] || fallback;
+  }
+  return fallback;
+};
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+const supabaseUrl = getEnvVar('EXPO_PUBLIC_SUPABASE_URL');
+const supabaseAnonKey = getEnvVar('EXPO_PUBLIC_SUPABASE_ANON_KEY');
+
+export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: false
       }
-    });
+    }) : null;

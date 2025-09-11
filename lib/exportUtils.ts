@@ -28,7 +28,8 @@ export const exportTimeRecords = async (
   filename: string, 
   locations: Location[] = []
 ) => {
-  if (typeof window === 'undefined') {
+  // Enhanced browser API guard for static rendering
+  if (typeof window === 'undefined' || typeof document === 'undefined' || typeof Blob === 'undefined') {
     throw new Error('Export functionality is only available in browser environment');
   }
 
