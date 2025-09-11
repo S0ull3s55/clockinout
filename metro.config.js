@@ -14,6 +14,9 @@ config.resolver.alias = {
   'react-native-web': path.resolve(__dirname, 'node_modules/react-native-web'),
 };
 
+// Prioritize browser field for web platform to prevent React context conflicts
+config.resolver.mainFields = ['browser', 'module', 'main'];
+
 // Add support for additional file extensions
 config.resolver.sourceExts.push('sql', 'db');
 
