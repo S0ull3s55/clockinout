@@ -4,7 +4,6 @@ import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { useFonts, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function RootLayout() {
   useFrameworkReady();
@@ -14,9 +13,7 @@ export default function RootLayout() {
     'Inter-Bold': Inter_700Bold,
   });
 
-  const { initialized, connectionStatus } = useAuth();
-
-  if (!fontsLoaded || !initialized || connectionStatus === 'connecting') {
+  if (!fontsLoaded) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#007AFF" />
