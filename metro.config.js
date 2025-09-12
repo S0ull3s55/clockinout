@@ -3,8 +3,17 @@ const path = require('path');
 
 const config = getDefaultConfig(__dirname);
 
+// Configure transformer for Expo Router
+config.transformer = {
+  ...config.transformer,
+  routerRoot: 'app',
+};
+
 // Ensure proper resolver configuration for Expo Router
 config.resolver.platforms = ['native', 'web', 'ios', 'android'];
+
+// Enable package exports for better module resolution
+config.resolver.unstable_enablePackageExports = true;
 
 // Add resolver aliases to prevent React hook conflicts
 config.resolver.alias = {
