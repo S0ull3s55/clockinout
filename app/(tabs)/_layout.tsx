@@ -1,16 +1,24 @@
 import { Tabs } from 'expo-router';
 import { Home, Settings, Clock, Users, History } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useAuth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ActivityIndicator, View } from 'react-native';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'expo-router';
 
 export default function TabLayout() {
+  const router = useRouter();
   const { session } = useAuth();
   const [userRole, setUserRole] = useState<string>('staff');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!session) {
+      router.replace('/auth/sign-in');
+      return;
+    }
+
     async function getUserRole() {
-      if (session?.user) {
+      try {
         const { data } = await supabase
           .from('profiles')
           .select('role')
@@ -20,11 +28,23 @@ export default function TabLayout() {
         if (data) {
           setUserRole(data.role);
         }
+      } catch (error) {
+        console.error('Error getting user role:', error);
+      } finally {
+        setLoading(false);
       }
     }
     
     getUserRole();
   }, [session]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </View>
+    );
+  }
 
   const isAdmin = userRole === 'admin' || userRole === 'super_admin';
 
