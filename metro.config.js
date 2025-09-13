@@ -1,35 +1,9 @@
 const { getDefaultConfig } = require('expo/metro-config');
-const path = require('path');
 
 const config = getDefaultConfig(__dirname);
 
-// Configure transformer for Expo Router
-config.transformer = {
-  ...config.transformer,
-  routerRoot: 'app',
-};
-
-// Ensure proper resolver configuration for Expo Router
-config.resolver.platforms = ['native', 'web', 'ios', 'android'];
-
-// Enable package exports for better module resolution
-config.resolver.unstable_enablePackageExports = true;
-
-// Add resolver aliases to prevent React hook conflicts
 config.resolver.alias = {
-  'react': path.resolve(__dirname, 'node_modules/react'),
-  'react-dom': path.resolve(__dirname, 'node_modules/react-dom'),
-  'react-native': path.resolve(__dirname, 'node_modules/react-native'),
-  'react-native-web': path.resolve(__dirname, 'node_modules/react-native-web'),
+  '@': __dirname,
 };
-
-// Prioritize browser field for web platform to prevent React context conflicts
-config.resolver.mainFields = ['browser', 'module', 'main'];
-
-// Add support for additional file extensions
-config.resolver.sourceExts.push('sql', 'db');
-
-// Ensure proper handling of symlinks and node_modules
-config.resolver.unstable_enableSymlinks = true;
 
 module.exports = config;
